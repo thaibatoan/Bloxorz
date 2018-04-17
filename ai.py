@@ -127,7 +127,7 @@ class Method:
 
 # region Global Variables (Default)
 # Player Control
-PLAYABLE = True
+PLAYABLE = False
 # Calculate path and display using OpenGL
 VISUALIZE = True
 # map of the level
@@ -528,11 +528,14 @@ def main(playable=PLAYABLE, visualize=VISUALIZE, method=ALGORITHM, level=LEVEL_A
 	if not playable:
 		if visualize:
 			if method is Method.hill_climbing:
-				a = Solver.hill_climbing(state)
+				path = Solver.hill_climbing(state)
 			elif method is Method.breadth_first_search:
-				a = Solver.bfs_path(state)
+				path = Solver.bfs_path(state)
 			elif method is Method.depth_first_search:
-				a = Solver.dfs_path(state)
+				path = Solver.dfs_path(state)
+			# reset position
+			state.prev = path[0]
+			state.set_player_position(path[0])
 		else:
 			if method is Method.hill_climbing:
 				Solver.hill_climbing(state)
@@ -544,8 +547,6 @@ def main(playable=PLAYABLE, visualize=VISUALIZE, method=ALGORITHM, level=LEVEL_A
 
 	pygame.init()
 	display = Display('Bloxorz', offset=(level.shape[1], level.shape[0]))
-	font = pygame.font.Font(None, 30)
-	clock = pygame.time.Clock()
 
 	steps = 0
 	action_queue = []
@@ -558,6 +559,7 @@ def main(playable=PLAYABLE, visualize=VISUALIZE, method=ALGORITHM, level=LEVEL_A
 
 		for event in pygame.event.get():
 			if display.is_trying_to_quit(event):
+				pygame.quit()
 				return
 
 			if playable:
@@ -573,14 +575,22 @@ def main(playable=PLAYABLE, visualize=VISUALIZE, method=ALGORITHM, level=LEVEL_A
 			else:
 				if event.type == pygame.KEYDOWN and event.key == pygame.K_RIGHT:
 					steps += 1
-					if steps >= len(a):
-						steps -= len(a)
-					state.set_player_position(a[steps])
-				if event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
+					degree = 0
+					if steps >= len(path):
+						steps -= len(path)
+					i = steps - 1 if steps > 0 else 0
+					state.prev = path[i] if steps > 0 else path[i]
+					state.set_player_position(path[steps])
+					print(steps, i)
+				elif event.type == pygame.KEYDOWN and event.key == pygame.K_LEFT:
 					steps -= 1
+					degree = 0
 					if steps < 0:
-						steps += len(a)
-					state.set_player_position(a[steps])
+						steps += len(path)
+					i = steps + 1 if steps < len(path) - 1 else len(path) - 1
+					state.prev = path[i]
+					state.set_player_position(path[steps])
+
 		state.draw_level()
 		state.draw_player()
 		display.update()
