@@ -33,21 +33,18 @@ def main(playable=True, visualize=True, method=Method.hill_climbing, stage=1):
 			# reset position
 			state.restart()
 		else:
+			import os
+			import psutil
+			process = psutil.Process(os.getpid())
+			print('Memory (MB):', process.memory_info().rss / 1024 / 1024)
 			if method is Method.hill_climbing:
 				# Solver.hill_climbing(state)
 				return
 			elif method is Method.breadth_first_search:
 				print('Time(ms):', time_function(Solver.bfs, state))
-				import os
-				import psutil
-				process = psutil.Process(os.getpid())
-				print('Memory:', process.memory_info().rss / 1024 / 1024, 'MB')
 			elif method is Method.depth_first_search:
-				import os
-				import psutil
 				print('Time(ms):', time_function(Solver.dfs, state))
-				process = psutil.Process(os.getpid())
-				print('Memory:', process.memory_info().rss / 1024 / 1024, 'MB')
+			print('Memory (MB):', process.memory_info().rss / 1024 / 1024)
 			return
 
 	from display import Display
@@ -107,8 +104,8 @@ def main(playable=True, visualize=True, method=Method.hill_climbing, stage=1):
 
 
 main(
-		stage=8,
+		stage=4,
 		playable=False,
-		visualize=True,
-		method=Method.breadth_first_search
+		visualize=False,
+		method=Method.depth_first_search
 )
