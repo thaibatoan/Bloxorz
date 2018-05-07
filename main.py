@@ -7,12 +7,34 @@ from state import State
 from utility import Method
 
 
-def time_function(func, *args):
-	start = time.time()
+def time_function(func, stage, *args):
+	import os
+	import psutil
+	process = psutil.Process(os.getpid())
+	before = process.memory_info().rss / 1024 / 1024
+	start = time.clock()
 	func(*args)
-	end = time.time()
-	total = end - start
-	return total * 1000
+	end = time.clock()
+	total = (end - start) * 1000
+	after = process.memory_info().rss / 1024 / 1024
+	print('Memory (Before): {0:.3f}MB'.format(before))
+	print('Memory (After): {0:.3f}MB'.format(after))
+	print('Time to complete: {0:.3f} ms'.format(total))
+
+	with open('result2.txt') as file:
+		lines = file.readlines()
+
+	with open('result2.txt', 'w') as file:
+		string = '{0:.3f}\t{1:.3f}\t{2:.3f}\n'.format(before, after, total)
+		if len(lines) == 0:
+			lines = [string]
+		elif int(stage) - 1 >= len(lines):
+			lines += [string]
+		else:
+			result = lines[-1].split('\t')
+			if float(result[2]) > total:
+				lines = lines[:-1] + [string]
+		file.writelines(lines)
 
 
 def main(playable=True, visualize=True, method=Method.hill_climbing, stage=1):
@@ -33,18 +55,13 @@ def main(playable=True, visualize=True, method=Method.hill_climbing, stage=1):
 			# reset position
 			state.restart()
 		else:
-			import os
-			import psutil
-			process = psutil.Process(os.getpid())
-			print('Memory (MB):', process.memory_info().rss / 1024 / 1024)
 			if method is Method.hill_climbing:
 				# Solver.hill_climbing(state)
 				return
 			elif method is Method.breadth_first_search:
-				print('Time(ms):', time_function(Solver.bfs, state))
+				time_function(Solver.bfs, stage, state)
 			elif method is Method.depth_first_search:
-				print('Time(ms):', time_function(Solver.dfs, state))
-			print('Memory (MB):', process.memory_info().rss / 1024 / 1024)
+				time_function(Solver.dfs, stage, state)
 			return
 
 	from display import Display
@@ -54,7 +71,6 @@ def main(playable=True, visualize=True, method=Method.hill_climbing, stage=1):
 	steps = 0
 	next_action = ''
 	while True:
-
 		if next_action != '' and state.degree == 90:
 			state.degree = 0
 			state.move(next_action)
@@ -105,7 +121,7 @@ def main(playable=True, visualize=True, method=Method.hill_climbing, stage=1):
 
 main(
 		stage=4,
-		playable=False,
+		playable=True,
 		visualize=False,
-		method=Method.depth_first_search
+		method=Method.breadth_first_search
 )

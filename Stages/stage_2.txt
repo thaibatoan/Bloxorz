@@ -1,0 +1,5 @@
+--- --- --- --- --- --- ooo ooo ooo ooo --- --- ooo ooo ooo
+ooo ooo ooo ooo --- --- ooo ooo S11 ooo --- --- ooo ggg ooo
+ooo ooo s10 ooo --- --- ooo ooo ooo ooo --- --- ooo ooo ooo
+ooo PPP ooo ooo b20 b30 ooo ooo ooo ooo b21 b31 ooo ooo ooo
+ooo ooo ooo ooo --- --- ooo ooo ooo ooo --- --- --- --- ---
