@@ -1,0 +1,10 @@
+--- ooo ooo B20 B30 ooo ooo --- --- --- --- --- --- --- ---
+--- ooo ooo --- --- ooo ooo ooo --- --- --- --- --- --- ---
+iii iii PPP --- --- ooo ooo ooo ooo --- --- --- --- --- ---
+iii iii --- --- --- --- --- ooo ooo ooo --- --- --- --- ---
+iii iii --- --- --- --- --- --- ooo ooo ooo --- --- --- ---
+iii ooo ooo ooo --- --- --- --- --- ooo ooo t0t --- --- ---
+--- ooo ggg ooo --- --- --- --- --- --- ooo ooo ooo ooo t00
+--- ooo ooo ooo ooo ooo ooo --- --- --- ooo s20 ooo ooo ooo
+--- --- ooo --- --- ooo ooo --- --- --- ooo ooo ooo --- ---
+--- --- ooo --- --- ooo ooo ooo B20 B30 ooo ooo t01 --- ---

@@ -1,0 +1,10 @@
+--- PPP ooo ooo ooo ooo ooo ooo ooo ooo s10 ooo ooo ooo ooo
+--- --- --- --- --- ooo ooo --- --- --- --- --- --- ooo ooo
+--- --- --- --- --- ooo ooo --- --- --- --- --- --- ooo ooo
+--- --- --- --- --- --- --- --- --- --- --- --- --- ooo ooo
+--- --- --- --- --- --- --- --- --- --- --- --- --- ooo ooo
+ooo ooo ooo --- --- ooo ooo b20 b30 ooo s21 ooo ooo ooo ooo
+ooo ggg ooo --- --- ooo ooo --- --- --- --- --- --- --- ---
+ooo ooo ooo --- --- ooo ooo --- --- --- --- --- --- --- ---
+--- ooo ooo --- --- ooo ooo --- --- --- --- --- --- --- ---
+--- ooo B21 B31 ooo ooo ooo ooo ooo ooo s01 ooo ooo ooo ---

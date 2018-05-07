@@ -1,0 +1,6 @@
+ooo ooo ooo --- --- --- --- --- --- ---
+ooo PPP ooo ooo ooo --- --- --- --- ---
+ooo ooo ooo ooo ooo ooo ooo ooo ooo ---
+--- ooo ooo ooo ooo ooo ooo ooo ooo ooo
+--- --- --- --- --- ooo ooo ggg ooo ooo
+--- --- --- --- --- ooo ooo ooo ooo ---

@@ -1,0 +1,10 @@
+--- ooo ooo ooo B10 --- --- --- --- --- --- ---
+--- ooo ggg ooo B10 --- --- --- --- --- --- ---
+--- ooo ooo ooo --- --- --- --- --- --- --- ---
+--- ooo --- --- --- ooo ooo ooo ooo ooo ooo ---
+--- ooo --- --- --- ooo ooo --- --- ooo ooo ---
+PPP ooo ooo ooo ooo ooo ooo --- --- ooo ooo ooo
+--- --- --- --- --- ooo s20 --- --- --- --- ooo
+--- --- --- --- --- ooo ooo ooo ooo --- --- ooo
+--- --- --- --- --- ooo ooo ooo ooo ooo ooo ooo
+--- --- --- --- --- --- --- --- ooo ooo ooo ---

@@ -1,0 +1,10 @@
+---    --- s21s04 B20 B30 ooo --- --- --- ooo b24 b34 S06          --- ---
+---    --- ---    --- --- ooo --- --- --- ooo --- --- ---          --- ---
+---    --- ---    --- --- ooo ooo ooo ooo ooo --- --- ---          --- ---
+S22S08 b23 b33    ooo ooo ooo ooo PPP ooo ooo ooo ooo b25          b35 S07
+---    --- ---    --- --- ooo ooo ooo ooo ooo --- --- ---          --- ---
+---    --- ---    --- --- b16 ooo --- --- ooo --- --- ---          --- ---
+---    --- ---    --- --- b16 ooo --- --- ooo B21 B31 s03          --- ---
+ooo    ooo ooo    --- --- ooo ooo --- --- ooo --- --- ---          --- ---
+ooo    ggg ooo    b28 b38 ooo --- --- --- ooo --- --- ---          --- ---
+ooo    ooo ooo    b27 --- ooo --- --- --- ooo B22 B32 s20s21s24s05 --- ---

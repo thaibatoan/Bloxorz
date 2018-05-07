@@ -1,0 +1,10 @@
+--- --- --- --- --- --- --- --- --- --- --- ooo ooo ooo ooo
+--- ooo ooo ooo ooo b20 b30 ooo s10 ooo ooo ooo ooo PPP ooo
+--- ooo ooo ooo ooo --- --- --- --- --- --- --- ooo ooo ooo
+--- ooo ooo s02 ooo --- --- --- --- --- --- --- ooo ooo ooo
+--- ooo ooo ooo ooo --- --- --- --- --- --- --- --- --- ---
+--- --- --- ooo ooo ooo s22 ooo B21 B31 ooo ooo ooo --- ---
+--- --- --- --- --- --- --- --- --- --- ooo ooo ooo ooo s02
+ooo ooo ooo --- --- --- --- --- --- --- ooo ooo ooo ooo ooo
+ooo ggg ooo ooo b22 b32 ooo ooo ooo ooo ooo ooo ooo --- ---
+ooo ooo ooo ooo --- --- --- --- --- --- --- --- --- --- ---

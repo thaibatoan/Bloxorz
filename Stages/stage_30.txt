@@ -1,0 +1,10 @@
+--- --- --- ooo ooo ooo ooo ooo iii iii ooo ooo ooo ooo ---
+--- --- --- ooo ggg ooo ooo --- --- --- --- --- iii ooo ---
+--- --- --- ooo ooo ooo --- --- --- --- --- --- iii ooo S20S02
+--- --- --- --- --- --- --- iii ooo ooo B20 B30 ooo ooo ooo
+--- --- PPP --- --- --- --- iii iii --- --- --- --- --- ooo
+--- S00 ooo iii --- --- --- iii iii --- --- --- --- --- ooo
+iii iii iii iii --- --- --- ooo ooo b22 --- --- b32 ooo ooo
+iii iii iii ooo iii ooo iii iii ooo iii --- --- S11 ooo b21
+ooo iii iii iii iii iii iii iii iii iii iii iii ooo --- ---
+--- iii ooo iii iii iii --- --- iii iii iii iii ooo --- ---

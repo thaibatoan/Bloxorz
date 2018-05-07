@@ -16,411 +16,6 @@ from utility import Direction, Tile
 # Bridges:			(On|off)			(up|down|left|right)	[id] 					- [B|b]	(0|1|2)	[0-9]
 # Teleport:			t					[id]					(trigger|first|second) 	- t		[0-9]	(t|0|1)
 
-LEVELS = np.array([
-	# Stage 1
-	"""
-ooo ooo ooo --- --- --- --- --- --- ---
-ooo PPP ooo ooo ooo --- --- --- --- ---
-ooo ooo ooo ooo ooo ooo ooo ooo ooo ---
---- ooo ooo ooo ooo ooo ooo ooo ooo ooo
---- --- --- --- --- ooo ooo ggg ooo ooo
---- --- --- --- --- ooo ooo ooo ooo ---
-""",
-	# Stage 2
-	"""
---- --- --- --- --- --- ooo ooo ooo ooo --- --- ooo ooo ooo
-ooo ooo ooo ooo --- --- ooo ooo S11 ooo --- --- ooo ggg ooo
-ooo ooo s10 ooo --- --- ooo ooo ooo ooo --- --- ooo ooo ooo
-ooo PPP ooo ooo b20 b30 ooo ooo ooo ooo b21 b31 ooo ooo ooo
-ooo ooo ooo ooo --- --- ooo ooo ooo ooo --- --- --- --- ---
-""",
-	# Stage 3
-	"""
---- --- --- --- --- --- ooo ooo ooo ooo ooo ooo ooo --- ---
-ooo ooo ooo ooo --- --- ooo ooo ooo --- --- ooo ooo --- ---
-ooo ooo ooo ooo ooo ooo ooo ooo ooo --- --- ooo ooo ooo ooo
-ooo PPP ooo ooo --- --- --- --- --- --- --- ooo ooo ggg ooo
-ooo ooo ooo ooo --- --- --- --- --- --- --- ooo ooo ooo ooo
---- --- --- --- --- --- --- --- --- --- --- --- ooo ooo ooo
-""",
-	# Stage 4
-	"""
---- --- --- iii iii iii iii iii iii iii --- --- --- ---
---- --- --- iii iii iii iii iii iii iii --- --- --- ---
-ooo ooo ooo ooo --- --- --- --- --- ooo ooo ooo --- ---
-ooo ooo ooo --- --- --- --- --- --- --- ooo ooo --- ---
-ooo ooo ooo --- --- --- --- --- --- --- ooo ooo --- ---
-ooo PPP ooo --- --- ooo ooo ooo ooo iii iii iii iii iii
-ooo ooo ooo --- --- ooo ooo ooo ooo iii iii iii iii iii
---- --- --- --- --- ooo ggg ooo --- --- iii iii ooo iii
---- --- --- --- --- ooo ooo ooo --- --- iii iii iii iii
-""",
-	# Stage 5
-	"""
---- --- --- --- --- --- --- --- --- --- --- ooo ooo ooo ooo
---- ooo ooo ooo ooo b20 b30 ooo s10 ooo ooo ooo ooo PPP ooo
---- ooo ooo ooo ooo --- --- --- --- --- --- --- ooo ooo ooo
---- ooo ooo s02 ooo --- --- --- --- --- --- --- ooo ooo ooo
---- ooo ooo ooo ooo --- --- --- --- --- --- --- --- --- ---
---- --- --- ooo ooo ooo s22 ooo B21 B31 ooo ooo ooo --- ---
---- --- --- --- --- --- --- --- --- --- ooo ooo ooo ooo s02
-ooo ooo ooo --- --- --- --- --- --- --- ooo ooo ooo ooo ooo
-ooo ggg ooo ooo b22 b32 ooo ooo ooo ooo ooo ooo ooo --- ---
-ooo ooo ooo ooo --- --- --- --- --- --- --- --- --- --- ---
-""",
-	# Stage 6
-	"""
---- --- --- --- --- ooo ooo ooo ooo ooo ooo --- --- --- ---
---- --- --- --- --- ooo --- --- ooo ooo ooo --- --- --- ---
---- --- --- --- --- ooo --- --- ooo ooo ooo ooo ooo --- ---
-PPP ooo ooo ooo ooo ooo --- --- --- --- --- ooo ooo ooo ooo
---- --- --- --- ooo ooo ooo --- --- --- --- ooo ooo ggg ooo
---- --- --- --- ooo ooo ooo --- --- --- --- --- ooo ooo ooo
---- --- --- --- --- --- ooo --- --- ooo ooo --- --- --- ---
---- --- --- --- --- --- ooo ooo ooo ooo ooo --- --- --- ---
---- --- --- --- --- --- ooo ooo ooo ooo ooo --- --- --- ---
---- --- --- --- --- --- --- ooo ooo ooo --- --- --- --- ---
-""",
-	# Stage 7
-	"""
---- --- --- --- --- --- --- --- ooo ooo ooo ooo --- --- ---
---- --- --- --- --- --- --- --- ooo ooo ooo ooo --- --- ---
-ooo ooo ooo --- --- --- --- --- ooo --- --- ooo ooo ooo ooo
-ooo PPP ooo ooo ooo ooo ooo ooo ooo --- --- ooo ooo ggg ooo
-ooo ooo ooo --- --- --- --- ooo ooo S10 --- --- ooo ooo ooo
-ooo ooo ooo --- --- --- --- ooo ooo ooo --- --- ooo ooo ooo
---- ooo ooo b20 --- --- --- ooo --- --- --- --- --- --- ---
---- --- ooo ooo ooo ooo ooo ooo --- --- --- --- --- --- ---
-""",
-	# Stage 8
-	"""
---- --- --- --- --- --- --- --- --- ooo ooo ooo --- --- ---
---- --- --- --- --- --- --- --- --- ooo t00 ooo --- --- ---
---- --- --- --- --- --- --- --- --- ooo ooo ooo --- --- ---
---- --- --- --- --- --- --- --- --- ooo ooo ooo --- --- ---
-ooo ooo ooo ooo ooo ooo --- --- --- ooo ooo ooo ooo ooo ooo
-ooo PPP ooo ooo t0t ooo --- --- --- ooo ooo ooo ooo ggg ooo
-ooo ooo ooo ooo ooo ooo --- --- --- ooo ooo ooo ooo ooo ooo
---- --- --- --- --- --- --- --- --- ooo ooo ooo --- --- ---
---- --- --- --- --- --- --- --- --- ooo ooo ooo --- --- ---
---- --- --- --- --- --- --- --- --- ooo t01 ooo --- --- ---
---- --- --- --- --- --- --- --- --- ooo ooo ooo --- --- ---
-""",
-	# Stage 9
-	"""
-ooo ooo ooo ooo --- --- --- ooo --- --- --- ooo ooo ooo ooo
-ooo PPP t01 ooo --- --- --- ooo --- --- --- ooo t00 t0t ooo
-ooo ooo ooo ooo ooo ooo ooo ooo ooo ooo ooo ooo ooo ooo ooo
---- --- --- --- --- --- ooo ggg ooo --- --- --- --- --- ---
---- --- --- --- --- --- ooo ooo ooo --- --- --- --- --- ---
-""",
-	# Stage 10
-	"""
-ooo ooo ooo --- --- --- --- --- ooo ooo    ooo ooo ooo    ooo
-ooo ggg ooo b20 b30 ooo b21 b31 ooo PPPt01 ooo ooo t0tt00 ooo
-ooo ooo ooo --- --- --- --- --- ooo ooo    ooo ooo b11    ---
---- --- --- --- --- --- --- --- --- ooo    ooo ooo b11    ---
---- --- --- --- --- --- --- --- --- ---    --- ooo ooo    ---
---- --- --- --- --- --- --- --- --- ---    --- --- ooo    ---
---- --- --- --- --- --- --- --- --- ---    --- --- ooo    ---
---- --- --- --- --- --- --- --- --- ---    --- ooo ooo    ---
---- --- --- --- ooo ooo ooo ooo ooo ---    --- ooo ooo    ---
---- --- --- --- ooo s10 --- --- ooo ooo    ooo S11 ooo    ---
-""",
-	# Stage 11
-	"""
---- ooo ooo ooo B10 --- --- --- --- --- --- ---
---- ooo ggg ooo B10 --- --- --- --- --- --- ---
---- ooo ooo ooo --- --- --- --- --- --- --- ---
---- ooo --- --- --- ooo ooo ooo ooo ooo ooo ---
---- ooo --- --- --- ooo ooo --- --- ooo ooo ---
-PPP ooo ooo ooo ooo ooo ooo --- --- ooo ooo ooo
---- --- --- --- --- ooo s20 --- --- --- --- ooo
---- --- --- --- --- ooo ooo ooo ooo --- --- ooo
---- --- --- --- --- ooo ooo ooo ooo ooo ooo ooo
---- --- --- --- --- --- --- --- ooo ooo ooo ---
-""",
-	# Stage 12
-	"""
---- --- --- --- --- --- --- --- --- --- --- --- S11
---- --- --- --- --- ooo ooo ooo --- --- ooo ooo ooo
---- --- --- --- --- ooo S10 ooo ooo ooo ooo ooo b20
---- --- --- ooo ooo ooo ooo ooo --- --- ooo ooo ---
---- --- --- ooo ggg ooo b21 --- --- --- ooo ooo ---
---- ooo ooo ooo ooo ooo --- --- --- ooo ooo ooo ooo
-ooo ooo PPP ooo --- --- --- --- --- ooo ooo ooo ooo
-ooo ooo ooo ooo --- --- ooo ooo ooo ooo ooo --- ---
---- --- --- --- --- ooo ooo ooo --- --- --- --- ---
---- --- --- --- --- ooo ooo ooo --- --- --- --- ---
-""",
-	# Stage 13
-	"""
-ooo ooo ooo iii ooo ooo ooo ooo iii ooo ooo ooo ooo ---
-ooo ooo --- --- --- --- --- --- --- --- ooo ooo ooo ---
-ooo ooo --- --- --- --- --- --- --- --- --- ooo ooo ooo
-ooo ooo ooo --- --- --- ooo ooo ooo --- --- ooo PPP ooo
-ooo ooo ooo iii iii iii ooo ggg ooo --- --- ooo ooo ooo
-ooo ooo ooo --- --- iii ooo ooo ooo --- --- ooo --- ---
---- --- ooo --- --- iii iii iii iii iii ooo ooo --- ---
---- --- ooo ooo ooo iii iii ooo iii iii iii --- --- ---
---- --- --- ooo ooo iii iii iii iii iii iii --- --- ---
---- --- --- ooo ooo ooo --- --- ooo ooo --- --- --- ---
-""",
-	# Stage 14
-	"""
---- --- --- --- --- --- --- --- ooo ooo ooo --- --- ---
---- --- --- ooo ooo ooo --- --- ooo ooo ooo --- --- ---
-ooo b20 b30 ooo PPP ooo ooo ooo ooo ooo ooo ooo ooo ooo
-ooo b21 b31 ooo ooo ooo --- --- --- --- --- --- S10 ooo
-ooo --- --- --- --- --- --- --- --- --- --- --- ooo ooo
-ooo --- --- --- --- --- --- --- --- --- --- --- ooo ooo
-ooo --- --- --- --- --- --- --- ooo ooo ooo ooo ooo ooo
-ooo ooo ooo ooo ooo --- --- --- ooo ooo ooo --- --- ---
---- ooo ooo ggg ooo --- --- --- ooo ooo ooo --- --- ---
---- --- ooo ooo ooo --- --- --- ooo ooo ooo ooo ooo S11
-""",
-	# Stage 15
-	"""
---- ---    --- --- --- --- --- ooo ooo    ooo --- --- ooo    ooo ooo
---- ---    --- --- ooo B21 B31 ooo ooo    ooo b20 b30 S11S12 t00 ooo
-ooo ooo    b22 b32 ooo --- --- ooo ooo    ooo --- --- ooo    ooo ooo
-ooo ooo    ooo ooo ooo --- --- --- s10s11 --- --- --- ---    --- ---
-ooo ooo    --- --- --- --- --- --- ---    --- --- --- ---    --- ---
---- ooo    --- --- --- --- --- t0t ---    --- --- --- ---    --- ---
---- ooo    --- --- --- --- --- ooo ---    --- --- --- ---    --- ---
-ooo ooo    ooo --- --- --- ooo ooo ooo    --- --- s23 ooo    ooo ---
-ooo PPPt01 ooo ooo ooo ooo ooo ooo ooo    B23 B33 ooo ggg    ooo ---
-ooo ooo    ooo --- --- --- ooo ooo ooo    --- --- s23 ooo    ooo ---
-""",
-	# Stage 16
-	"""
----          t1tt00t41 ---       --- --- ---    --- --- --- --- ooo ooo ooo
-t4tt01t20t31 ooo       t2tt21t40 b20 b30 S00t11 S01 t10 b21 b31 ooo ggg ooo
----          t3tt30    ---       --- --- ---    --- --- --- --- ooo ooo ooo
----          ---       ---       --- --- ---    --- --- --- --- --- --- ---
----          ---       ---       --- --- ---    --- --- --- --- --- --- ---
----          ---       ooo       ooo ooo ---    --- --- ooo ooo ooo --- ---
----          ---       ooo       PPP ooo ooo    ooo ooo ooo t0t ooo --- ---
----          ---       ooo       ooo ooo ---    --- --- ooo ooo ooo --- ---
-""",
-	# Stage 17
-	"""
-ooo ooo ooo --- --- --- --- --- --- --- --- --- ---    --- ---
-ooo PPP ooo ooo ooo ooo ooo ooo ooo b22 --- --- ooo    ooo ooo
-ooo ooo ooo --- --- --- --- b31 ooo ooo ooo ooo ooo    ggg ooo
-ooo ooo ooo --- --- --- --- --- --- --- --- --- S24    S04 ooo
-ooo ooo ooo --- --- --- --- --- --- --- --- --- ---    --- ---
-ooo ooo ooo --- --- --- --- --- --- --- --- --- ---    --- ---
-ooo ooo ooo --- --- --- b34 ooo ooo ooo ooo ooo S01    --- ---
-ooo ooo ooo ooo ooo ooo ooo ooo b20 --- --- ooo ooo    --- ---
-ooo s10 ooo --- --- --- --- --- --- --- --- ooo ooo    --- ---
-ooo ooo ooo --- --- --- --- --- --- --- --- ooo S20S02 --- ---
-""",
-	# Stage 18
-	"""
---- --- --- --- --- --- --- s00 --- --- --- --- --- --- ---
-ooo ooo s21 ooo --- --- --- ooo --- --- --- --- --- --- ---
-ooo ooo ooo ooo ooo --- --- ooo --- --- --- --- --- --- ---
-ooo s20 PPP ooo ooo ooo ooo ooo b20 b30 ooo ooo b21 b31 ooo
-ooo ooo ooo ooo ooo b22 --- --- ooo --- --- --- ooo --- ---
-ooo ooo s21 ooo --- --- --- --- ooo --- --- --- ooo --- ---
-ooo --- --- --- --- --- --- --- s01 --- --- ooo ooo ooo ---
-ooo --- --- --- --- --- --- --- --- --- ooo ooo ggg ooo ---
-ooo b21 b31 S12 --- --- --- --- --- --- ooo ooo ooo ooo ---
-""",
-	# Stage 19
-	"""
---- PPP ooo ooo ooo ooo ooo ooo ooo ooo s10 ooo ooo ooo ooo
---- --- --- --- --- ooo ooo --- --- --- --- --- --- ooo ooo
---- --- --- --- --- ooo ooo --- --- --- --- --- --- ooo ooo
---- --- --- --- --- --- --- --- --- --- --- --- --- ooo ooo
---- --- --- --- --- --- --- --- --- --- --- --- --- ooo ooo
-ooo ooo ooo --- --- ooo ooo b20 b30 ooo s21 ooo ooo ooo ooo
-ooo ggg ooo --- --- ooo ooo --- --- --- --- --- --- --- ---
-ooo ooo ooo --- --- ooo ooo --- --- --- --- --- --- --- ---
---- ooo ooo --- --- ooo ooo --- --- --- --- --- --- --- ---
---- ooo B21 B31 ooo ooo ooo ooo ooo ooo s01 ooo ooo ooo ---
-""",
-	# Stage 20
-	"""
---- --- --- --- --- --- --- --- --- --- --- --- ooo ooo ooo
---- --- ooo ooo ooo B20 B30 ooo ooo ooo b21 b31 ooo t00 ooo
---- --- ooo ooo ooo --- --- s20 PPP ooo --- --- ooo ooo ooo
---- --- ooo ooo ooo --- --- ooo ooo ooo --- --- --- --- ---
---- --- ooo s20 ooo --- --- t0t ooo s20 --- --- --- --- ---
---- --- ooo ooo ooo --- --- ooo ooo ooo --- --- --- --- ---
-ooo ooo ooo ooo --- --- --- ooo ooo ooo b22 b32 s12 ooo ooo
-ooo s11 --- --- --- --- --- --- --- --- --- --- ooo t01 ooo
---- --- --- --- --- --- --- --- --- --- --- --- ooo ggg ooo
---- --- --- --- --- --- --- --- --- --- --- --- ooo ooo ooo
-""",
-	# Stage 21
-	"""
---- --- --- --- --- --- --- --- ooo ooo --- --- --- --- ---
---- --- --- --- --- --- --- ooo ooo ooo --- --- --- --- ---
-ooo ooo --- --- ooo ooo ooo ooo ooo ooo --- --- --- --- ---
-ooo PPP ooo ooo ooo ooo --- --- ooo --- --- --- --- --- ---
-ooo ooo ooo ooo --- --- --- --- ooo --- --- --- ooo ooo ooo
---- ooo ooo --- --- --- --- --- S10 ooo ooo ooo ooo ggg ooo
---- --- ooo --- --- --- --- --- S11 ooo --- --- ooo ooo ooo
---- --- ooo ooo ooo b21 --- --- ooo ooo --- --- --- --- ---
---- --- --- ooo ooo ooo --- --- ooo ooo --- --- --- --- ---
---- --- --- b30 ooo ooo ooo ooo ooo ooo --- --- --- --- ---
-""",
-	# Stage 22
-	"""
---- --- --- --- ---    ooo ooo    --- --- --- --- ooo ooo ooo
---- --- --- ooo ooo    ooo ooo    ooo ooo --- --- ooo ggg ooo
-ooo ooo ooo ooo ooo    ooo s20s21 ooo ooo ooo ooo ooo ooo ooo
-ooo PPP ooo ooo s20s21 --- ---    ooo ooo ooo ooo ooo b22 ---
-ooo ooo ooo --- ---    --- ---    --- --- ooo ooo ooo --- ---
---- ooo --- --- ---    --- ---    --- --- --- ooo --- --- ---
---- ooo --- --- ---    --- ---    --- --- --- ooo --- --- ---
---- ooo b21 --- ---    --- ---    --- --- B30 ooo --- --- ---
---- ooo ooo --- ---    --- ---    --- --- ooo ooo --- --- ---
---- --- S12 --- ---    --- ---    --- --- S11 --- --- --- ---
-""",
-	# Stage 23
-	"""
----    ooo ooo ooo --- --- --- --- --- --- --- --- ooo    ooo    ooo
----    ooo S04 ooo --- --- --- --- --- --- --- --- ooo    s00s11 ooo
----    ooo t01 ooo --- --- --- ooo ooo ooo B22 B32 ooo    ooo    ooo
-b33    ooo ooo ooo b24 --- --- ooo ggg ooo --- --- ooo    ooo    s22
-ooo    --- --- --- ooo --- --- ooo ooo ooo --- --- ---    ---    ooo
-s20s03 --- --- --- ooo --- --- iii iii iii --- --- ---    ---    ooo
-ooo    b20 b30 ooo ooo ooo iii iii iii iii iii ooo ooo    ooo    B22
----    --- --- ooo PPP ooo iii iii iii iii iii ooo t0tt00 ooo    ---
----    --- --- ooo ooo ooo iii iii iii iii iii ooo ooo    ooo    ---
----    --- --- ooo ooo ooo ooo ooo b21 --- --- --- ---    ---    ---
-""",
-	# Stage 24
-	"""
---- --- --- --- --- --- --- --- --- --- ooo ooo ooo ooo
---- --- --- b30 ooo ooo ooo ooo ooo ooo ooo S01 ooo t0t
---- PPP b21 b31 ooo S02 ooo --- --- --- ooo ooo ooo ooo
-S00 ooo --- --- ooo ooo --- --- --- --- --- --- ooo ---
-ooo ooo --- --- ooo --- --- --- --- --- --- --- ooo ---
-ooo ooo ooo ooo ooo --- --- --- --- --- ooo ooo ooo ---
-ooo ooo ooo --- --- t00 ooo t01 b23 b33 ooo ggg ooo ---
---- --- --- --- --- S03 ooo b22 --- --- ooo ooo ooo ---
-""",
-	# Stage 25
-	"""
---- --- ooo ooo ---    --- --- --- ---    --- --- --- --- ---
---- --- ooo ooo ooo    --- --- --- ---    --- --- --- --- ---
---- --- ooo ooo s10s13 --- --- --- ---    --- ooo ooo ooo b13
---- --- --- ooo ooo    ooo ooo b22 ---    --- ooo ggg ooo b13
---- --- --- --- ---    --- ooo ooo b20    b30 ooo ooo ooo ---
---- ooo ooo --- ---    --- ooo ooo ---    --- --- --- --- ---
-ooo ooo S00 ooo B21    B31 ooo ooo ---    --- --- --- --- ---
-ooo PPP ooo B14 ---    --- ooo ooo ---    --- --- ooo ooo ooo
-ooo ooo ooo B14 ---    --- ooo ooo s21s02 ooo ooo ooo ooo ooo
---- --- --- --- ---    --- --- --- ---    --- --- ooo ooo ooo
-""",
-	# Stage 26
-	"""
---- --- --- --- --- ooo ooo ooo ooo --- ---    --- --- t0t
---- --- --- --- --- ooo ooo s20 ooo ooo ooo    --- --- ooo
---- --- --- --- ooo ooo ooo ooo ooo ooo ooo    --- --- ooo
-ooo ooo B20 B30 ooo ooo ooo ooo --- --- ooo    ooo t00 ooo
-ooo ooo ooo b21 --- --- ooo --- --- --- ooo    ooo --- ---
-ooo ooo ooo --- --- --- ooo --- --- --- PPPt01 --- --- ---
---- ooo --- --- --- --- ooo ooo ooo --- ---    --- --- ---
---- S01 --- --- --- --- ooo ggg ooo b21 ---    --- --- ---
---- --- --- --- --- --- ooo ooo ooo --- ---    --- --- ---
-""",
-	# Stage 27
-	"""
-ooo ooo ooo --- --- --- --- ooo ooo ooo ooo ooo ooo ooo    ooo
-ooo PPP ooo ooo ooo ooo ooo ooo ooo ooo ooo --- --- ooo    ooo
-ooo ooo ooo --- --- --- --- ooo ooo --- --- --- --- ooo    ooo
---- --- --- --- --- --- --- --- --- --- --- --- ooo S20S21 ooo
---- --- --- --- --- --- --- --- --- --- --- --- ooo ooo    ---
-ooo ooo ooo --- --- iii iii iii iii ooo --- --- s20 s21    ---
-ooo ggg ooo iii iii iii iii iii iii iii --- --- ooo ooo    ooo
-ooo ooo ooo iii iii iii iii iii iii iii iii iii ooo ooo    ooo
---- --- --- --- --- iii iii iii iii iii iii iii ooo ooo    ooo
---- --- --- --- --- --- B30 ooo ooo B21 --- --- --- ---    ---
-""",
-	# Stage 28
-	"""
---- ooo ooo B20 B30 ooo ooo --- --- --- --- --- --- --- ---
---- ooo ooo --- --- ooo ooo ooo --- --- --- --- --- --- ---
-iii iii PPP --- --- ooo ooo ooo ooo --- --- --- --- --- ---
-iii iii --- --- --- --- --- ooo ooo ooo --- --- --- --- ---
-iii iii --- --- --- --- --- --- ooo ooo ooo --- --- --- ---
-iii ooo ooo ooo --- --- --- --- --- ooo ooo t0t --- --- ---
---- ooo ggg ooo --- --- --- --- --- --- ooo ooo ooo ooo t00
---- ooo ooo ooo ooo ooo ooo --- --- --- ooo s20 ooo ooo ooo
---- --- ooo --- --- ooo ooo --- --- --- ooo ooo ooo --- ---
---- --- ooo --- --- ooo ooo ooo B20 B30 ooo ooo t01 --- ---
-""",
-	# Stage 29
-	"""
----    --- s21s04 B20 B30 ooo --- --- --- ooo b24 b34 S06          --- ---
----    --- ---    --- --- ooo --- --- --- ooo --- --- ---          --- ---
----    --- ---    --- --- ooo ooo ooo ooo ooo --- --- ---          --- ---
-S22S08 b23 b33    ooo ooo ooo ooo PPP ooo ooo ooo ooo b25          b35 S07
----    --- ---    --- --- ooo ooo ooo ooo ooo --- --- ---          --- ---
----    --- ---    --- --- b16 ooo --- --- ooo --- --- ---          --- ---
----    --- ---    --- --- b16 ooo --- --- ooo B21 B31 s03          --- ---
-ooo    ooo ooo    --- --- ooo ooo --- --- ooo --- --- ---          --- ---
-ooo    ggg ooo    b28 b38 ooo --- --- --- ooo --- --- ---          --- ---
-ooo    ooo ooo    b27 --- ooo --- --- --- ooo B22 B32 s20s21s24s05 --- ---
-""",
-	# Stage 30
-	"""
---- --- --- ooo ooo ooo ooo ooo iii iii ooo ooo ooo ooo ---
---- --- --- ooo ggg ooo ooo --- --- --- --- --- iii ooo ---
---- --- --- ooo ooo ooo --- --- --- --- --- --- iii ooo S20S02
---- --- --- --- --- --- --- iii ooo ooo B20 B30 ooo ooo ooo
---- --- PPP --- --- --- --- iii iii --- --- --- --- --- ooo
---- S00 ooo iii --- --- --- iii iii --- --- --- --- --- ooo
-iii iii iii iii --- --- --- ooo ooo b22 --- --- b32 ooo ooo
-iii iii iii ooo iii ooo iii iii ooo iii --- --- S11 ooo b21
-ooo iii iii iii iii iii iii iii iii iii iii iii ooo --- ---
---- iii ooo iii iii iii --- --- iii iii iii iii ooo --- ---
-""",
-	# Stage 31
-	"""
---- --- ---    --- --- --- ---          ---          --- --- --- ooo ooo ooo b25
---- ooo ooo    ooo --- --- ---          ---          S10 --- --- ooo ggg ooo b25
---- ooo ooo    ooo B23 B33 ooo          ooo          ooo b20 b30 ooo ooo ooo b25
---- ooo ooo    ooo --- --- ooo          ooo          ooo --- --- --- ooo --- ---
---- iii iii    iii --- --- s20s21s22s23 ooo          ooo --- --- --- iii --- ---
---- --- iii    --- --- --- ooo          ooo          ooo --- --- iii iii iii ---
---- --- ooo    --- --- --- ooo          ooo          ooo --- --- ooo ooo ooo ---
-B04 ooo ooo    ooo b22 b32 ooo          s20s21s22s23 ooo B21 B31 ooo PPP ooo ---
-B04 ooo S23S05 ooo --- --- S12          ---          --- --- --- ooo ooo ooo ---
-B04 ooo ooo    ooo --- --- ---          ---          --- --- --- --- --- --- ---
-""",
-	# Stage 32
-	"""
---- --- --- --- --- --- --- --- --- --- --- --- ooo S10S12
---- --- ooo ooo B20 B30 ooo ooo --- --- --- ooo ooo ooo
---- ooo ooo ooo b21 b31 ooo ooo --- --- ooo S13 ooo ooo
---- ooo ggg ooo --- --- --- ooo ooo ooo ooo ooo --- ---
---- ooo ooo ooo --- --- --- --- ooo ooo ooo --- --- ---
---- --- --- --- --- --- --- --- --- ooo ooo --- --- ---
---- --- --- --- ooo ooo ooo --- --- ooo PPP	 --- --- ---
-ooo ooo b22 b32 ooo S11 ooo --- --- ooo ooo --- --- ---
-ooo ooo b23 b33 ooo ooo ooo ooo ooo ooo ooo --- --- ---
-""",
-	# Stage 33
-	"""
---- --- --- --- --- ooo ooo s20 ooo ooo ooo --- --- --- ---
---- --- --- --- --- ooo ooo ooo ooo ooo ooo b21 --- --- ---
-ooo ooo ooo --- --- s20 ooo ooo s20 ooo ooo ooo ooo ooo ---
-ooo PPP ooo B22 B32 ooo ooo ooo ooo s20 s20 ooo ooo s20 ---
---- --- --- --- --- ooo ooo s20 ooo ooo s20 ooo ooo ooo ---
---- --- --- --- --- ooo ooo ooo ooo ooo ooo s20 ooo ooo ---
-ooo ooo ooo --- --- ooo ooo ooo ooo ooo ooo s20 ooo ooo ooo
-ooo ggg ooo B20 B30 ooo s20 ooo --- --- ooo ooo ooo s20 S01
-ooo ooo ooo --- --- ooo ooo ooo --- --- --- ooo ooo ooo ooo
-ooo ooo ooo --- --- --- --- --- --- --- --- --- ooo ooo ooo
-"""
-
-])
 rotating_speed = 15
 
 
@@ -430,7 +25,6 @@ class State:
 		self.steps = 0
 		self.degree = 0
 		self.found = False
-		self.start = (0, 0, Direction.standing)
 		self.bridges = {}
 		self.switches = {}
 		self.teleporter = {}
@@ -634,47 +228,45 @@ class State:
 				self.board[y, x] = bridge[1] + text[1:]
 
 	def load_level(self, number: int):
-		level = []
-		lines = LEVELS[number - 1].splitlines()
-		lines = [line for line in lines if line.strip()]
-		self.bridges = {}
-		for y, line in enumerate(lines):
-			if line.strip():
-				row = [c for c in line.split() if c]
-				level.append(row)
-				for x, cell in enumerate(row):
-					for i in range(0, len(cell), 3):
-						# for every 3 characters
-						feature = cell[i:i + 3]
-						first_char = feature[0]
-						if first_char == 'b' or first_char == 'B':
-							bridge_id = feature[2]
-							if bridge_id in self.bridges:
-								self.bridges[bridge_id].append((x, y))
-							else:
-								self.bridges[bridge_id] = [(x, y)]
-						elif first_char == 's' or first_char == 'S':
-							if (x, y) in self.switches:
-								self.switches[(x, y)].append(feature)
-							else:
-								self.switches[(x, y)] = [feature]
-						elif first_char == 't':
-							if feature[2] != 't':
-								# { 't[0-9]t': [ t[0-9][0-1] ] }
-								trigger_id = 't' + feature[1] + 't'
-								if trigger_id in self.teleporter:
-									position = int(feature[2])
-									self.teleporter[trigger_id][position:position] = [[x, y]]
+		with open('Stages/stage_{}.txt'.format(number)) as file:
+			level = []
+			for y, line in enumerate(file):
+				if line.strip():
+					row = [c for c in line.split() if c]
+					level.append(row)
+					for x, cell in enumerate(row):
+						for i in range(0, len(cell), 3):
+							# for every 3 characters
+							feature = cell[i:i + 3]
+							first_char = feature[0]
+							if first_char == 'b' or first_char == 'B':
+								bridge_id = feature[2]
+								if bridge_id in self.bridges:
+									self.bridges[bridge_id].append((x, y))
 								else:
-									self.teleporter[trigger_id] = [[x, y]]
-							else:
+									self.bridges[bridge_id] = [(x, y)]
+							elif first_char == 's' or first_char == 'S':
 								if (x, y) in self.switches:
 									self.switches[(x, y)].append(feature)
 								else:
 									self.switches[(x, y)] = [feature]
-						elif feature == 'PPP':
-							self.player = np.array([[x, y], [x, y]])
-							self.start = (x, y, Direction.standing)
+							elif first_char == 't':
+								if feature[2] != 't':
+									# { 't[0-9]t': [ t[0-9][0-1] ] }
+									trigger_id = 't' + feature[1] + 't'
+									if trigger_id in self.teleporter:
+										position = int(feature[2])
+										self.teleporter[trigger_id][position:position] = [[x, y]]
+									else:
+										self.teleporter[trigger_id] = [[x, y]]
+								else:
+									if (x, y) in self.switches:
+										self.switches[(x, y)].append(feature)
+									else:
+										self.switches[(x, y)] = [feature]
+							elif feature == 'PPP':
+								self.player = np.array([[x, y], [x, y]])
+
 		return np.array(level)
 
 	def restart(self):
@@ -764,13 +356,12 @@ class State:
 		x_center, y_center = self.previous[0]
 		x_diff, y_diff = 0, 0
 		if self.move_direction == 'up':
-			pass
+			y_diff = -2
 		elif self.move_direction == 'down':
 			y_center += 2
 			y_diff = 2
-			pass
 		elif self.move_direction == 'left':
-			pass
+			x_diff = -2
 		elif self.move_direction == 'right':
 			x_center += 2
 			x_diff = 2

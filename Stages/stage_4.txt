@@ -1,0 +1,9 @@
+--- --- --- iii iii iii iii iii iii iii --- --- --- ---
+--- --- --- iii iii iii iii iii iii iii --- --- --- ---
+ooo ooo ooo ooo --- --- --- --- --- ooo ooo ooo --- ---
+ooo ooo ooo --- --- --- --- --- --- --- ooo ooo --- ---
+ooo ooo ooo --- --- --- --- --- --- --- ooo ooo --- ---
+ooo PPP ooo --- --- ooo ooo ooo ooo iii iii iii iii iii
+ooo ooo ooo --- --- ooo ooo ooo ooo iii iii iii iii iii
+--- --- --- --- --- ooo ggg ooo --- --- iii iii ooo iii
+--- --- --- --- --- ooo ooo ooo --- --- iii iii iii iii
